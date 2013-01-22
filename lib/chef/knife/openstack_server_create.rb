@@ -211,7 +211,8 @@ class Chef
 
       if config[:floating_ip]
         associated = false
-        connection.addresses.each do |address|
+        connection.allocate_address if connection.addresses.index { |address| address.instance_id.nil?} == nil
+	connection.addresses.each do |address|
           if address.instance_id.nil?
             server.associate_address(address.ip)
             #a bit of a hack, but server.reload takes a long time
